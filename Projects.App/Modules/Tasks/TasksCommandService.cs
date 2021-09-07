@@ -1,5 +1,6 @@
 using System;
 using Eventuous;
+using Projects.Domain.Projects;
 using Projects.Domain.Tasks;
 using Projects.Domain.Users;
 using static Projects.App.Modules.Tasks.TaskCommands;
@@ -12,6 +13,7 @@ namespace Projects.App.Modules.Tasks {
                 async (task, cmd, _) => {
                     task.CreateTask(
                         new TaskName(cmd.Name),
+                        new ProjectId(cmd.ProjectId),
                         cmd.Description,
                         cmd.Duration,
                         cmd.Priority,

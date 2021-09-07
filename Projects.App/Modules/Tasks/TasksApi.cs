@@ -13,7 +13,7 @@ namespace Projects.App.Modules.Tasks {
         public TasksApi(TasksCommandService service) => _service = service;
 
         [HttpPost]
-        public Task Post([FromBody] V1.CreateTask cmd, CancellationToken cancellationToken)
+        public Task<Result<ProjectTask, ProjectTaskState, ProjectTaskId>> Post([FromBody] V1.CreateTask cmd, CancellationToken cancellationToken)
             => _service.Handle(cmd, cancellationToken);
 
         [HttpPost("assign")]

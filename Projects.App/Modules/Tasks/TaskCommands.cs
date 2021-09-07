@@ -1,4 +1,5 @@
 using System;
+
 // ReSharper disable SuggestBaseTypeForParameterInConstructor
 
 namespace Projects.App.Modules.Tasks {
@@ -6,6 +7,7 @@ namespace Projects.App.Modules.Tasks {
         public static class V1 {
             public record CreateTask(
                 string         TaskId,
+                string         ProjectId,
                 string         Name,
                 string         Description,
                 TimeSpan       Duration,

@@ -2,6 +2,8 @@ using System;
 using System.Threading.Tasks;
 using Eventuous;
 using Eventuous.EventStoreDB;
+using Eventuous.Projections.MongoDB;
+using Eventuous.Subscriptions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -9,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using MongoDB.Driver;
+using Projects.App.Modules.Projects;
+using Projects.App.Modules.Queries;
 using Projects.App.Modules.Tasks;
 using Projects.Domain.Tasks;
 using Projects.Domain.Users;
@@ -29,10 +33,17 @@ namespace Projects.App {
             var settings = Settings.Load(Configuration);
             
             services.AddEventStoreClient(settings.EventStore.ConnectionString);
+            services.AddSingleton(ConfigureMongo(settings.Mongo));
             services.AddSingleton<IEventStore, EsdbEventStore>();
             services.AddSingleton<IAggregateStore, AggregateStore>();
+            services.AddSingleton<ICheckpointStore, MongoCheckpointStore>();
 
             services.AddSingleton<TasksCommandService>();
+            services.AddSingleton<ProjectService>();
+
+            services.AddSubscription<QuerySubscription>()
+                .AddEventHandler<TasksHandler>()
+                .AddEventHandler<ProjectWithTasksProjection>();
             
             services.AddControllers();
 

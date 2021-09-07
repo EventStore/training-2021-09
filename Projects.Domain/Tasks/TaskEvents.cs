@@ -7,12 +7,12 @@ namespace Projects.Domain.Tasks {
             [EventType("V1.TaskCreated")]
             public record TaskCreated(
                 string         TaskId,
+                string         ProjectId,
                 string         Name,
                 string         Description,
                 TimeSpan       Duration,
                 int            Priority,
                 float          ChargeRate,
-                // string[]?      AssignedStuff,
                 DateTimeOffset CreatedAt,
                 string         CreatedBy
             );

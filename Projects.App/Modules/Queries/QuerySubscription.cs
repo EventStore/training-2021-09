@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 namespace Projects.App.Modules.Queries {
     public class QuerySubscription : AllStreamSubscription {
         public const string Id = "Queries";
+        
         public QuerySubscription(
             EventStoreClient           eventStoreClient,
             ICheckpointStore           checkpointStore,

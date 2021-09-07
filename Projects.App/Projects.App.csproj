@@ -19,21 +19,4 @@
     <ItemGroup>
       <ProjectReference Include="..\Projects.Domain\Projects.Domain.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Compile Remove="Modules\Queries\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <EmbeddedResource Remove="Modules\Queries\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="Modules\Queries\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Content Remove="Modules\Queries\**" />
-    </ItemGroup>
-
 </Project>
