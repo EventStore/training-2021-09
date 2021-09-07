@@ -1,4 +1,4 @@
-using EventStore.Client;
+using System;
 using Eventuous;
 using Eventuous.EventStoreDB;
 using Microsoft.AspNetCore.Builder;
@@ -7,8 +7,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using MongoDB.Driver;
 using Projects.App.Modules.Tasks;
 using Projects.Domain.Tasks;
+using MongoDefaults = Eventuous.Projections.MongoDB.Tools.MongoDefaults;
 
 namespace Projects.App {
     public class Startup {
@@ -21,7 +23,10 @@ namespace Projects.App {
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
             TypeMap.RegisterKnownEventTypes(typeof(TaskEvents.V1.TaskCreated).Assembly);
-            services.AddSingleton(ConfigureEventStore("esdb://localhost:2113?tls=false"));
+
+            var settings = Settings.Load(Configuration);
+            
+            services.AddEventStoreClient(settings.EventStore.ConnectionString);
             services.AddSingleton<IEventStore, EsdbEventStore>();
             services.AddSingleton<IAggregateStore, AggregateStore>();
 
@@ -46,9 +51,12 @@ namespace Projects.App {
             app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
         
-        public static EventStoreClient ConfigureEventStore(string connectionString) {
-            var settings = EventStoreClientSettings.Create(connectionString);
-            return new EventStoreClient(settings);
+        public static IMongoDatabase ConfigureMongo(Mongo mongoSettings) {
+            MongoDefaults.RegisterConventions();
+
+            var settings = MongoClientSettings.FromConnectionString(mongoSettings.ConnectionString);
+            settings.ConnectTimeout = TimeSpan.FromSeconds(10);
+            return new MongoClient(settings).GetDatabase(mongoSettings.Database);
         }
     }
 }
