@@ -1,4 +1,5 @@
 using System;
+// ReSharper disable SuggestBaseTypeForParameterInConstructor
 
 namespace Projects.App.Modules.Tasks {
     public static class TaskCommands {
@@ -14,6 +15,8 @@ namespace Projects.App.Modules.Tasks {
                 DateTimeOffset CreatedAt,
                 string         CreatedBy
             );
+
+            public record AssignStaff(string TaskId, string UserId);
         }
     }
 }

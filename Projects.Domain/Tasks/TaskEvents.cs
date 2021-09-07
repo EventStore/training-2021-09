@@ -12,10 +12,13 @@ namespace Projects.Domain.Tasks {
                 TimeSpan       Duration,
                 int            Priority,
                 float          ChargeRate,
-                string[]?      AssignedStuff,
+                // string[]?      AssignedStuff,
                 DateTimeOffset CreatedAt,
                 string         CreatedBy
             );
+
+            [EventType("V1.StaffAssignedToTask")]
+            public record StaffAssignedToTask(string TaskId, string UserId);
         }
     }
 }

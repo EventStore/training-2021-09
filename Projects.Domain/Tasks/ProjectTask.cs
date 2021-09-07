@@ -1,5 +1,7 @@
 using System;
+using System.Threading.Tasks;
 using Eventuous;
+using Projects.Domain.Users;
 using static Projects.Domain.Tasks.TaskEvents;
 
 namespace Projects.Domain.Tasks {
@@ -10,7 +12,6 @@ namespace Projects.Domain.Tasks {
             TimeSpan       duration,
             int            priority,
             Rate           chargeRate,
-            string[]?      assignedStuff,
             DateTimeOffset createdAt,
             string         createdBy
         ) {
@@ -22,11 +23,17 @@ namespace Projects.Domain.Tasks {
                     duration,
                     priority,
                     chargeRate.Value,
-                    assignedStuff,
                     createdAt,
                     createdBy
                 )
             );
+
+        }
+
+        public void AssignStaff(UserId userId) {
+            if (State.StaffAlreadyAssigned(userId)) return;
+
+            Apply(new V1.StaffAssignedToTask(State.Id, userId.Value));
         }
     }
 }

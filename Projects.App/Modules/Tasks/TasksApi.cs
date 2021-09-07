@@ -13,5 +13,9 @@ namespace Projects.App.Modules.Tasks {
         [HttpPost]
         public Task Post([FromBody] V1.CreateTask cmd, CancellationToken cancellationToken)
             => _service.Handle(cmd, cancellationToken);
+
+        [HttpPost("assign")]
+        public Task AssignStaff([FromBody] V1.AssignStaff cmd, CancellationToken cancellationToken)
+            => _service.Handle(cmd, cancellationToken);
     }
 }

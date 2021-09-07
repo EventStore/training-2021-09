@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Eventuous;
 using Eventuous.EventStoreDB;
 using Microsoft.AspNetCore.Builder;
@@ -10,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using MongoDB.Driver;
 using Projects.App.Modules.Tasks;
 using Projects.Domain.Tasks;
+using Projects.Domain.Users;
 using MongoDefaults = Eventuous.Projections.MongoDB.Tools.MongoDefaults;
 
 namespace Projects.App {
@@ -33,6 +35,9 @@ namespace Projects.App {
             services.AddSingleton<TasksCommandService>();
             
             services.AddControllers();
+
+            Task<bool> ValidateUser(UserId userId) => Task.FromResult(userId.Value.Contains("someone"));
+            services.AddSingleton<IsUserValid>(ValidateUser);
 
             services.AddSwaggerGen(
                 c => c.SwaggerDoc("v1", new OpenApiInfo { Title = "Projects.App", Version = "v1" })
