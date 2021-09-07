@@ -24,8 +24,8 @@ namespace Projects.Domain.Tasks {
                 Id = new ProjectTaskId(evt.TaskId),
                 // AssignedStaff = AssignSeveralPeople(evt.AssignedStuff)
             };
-        
-        ImmutableList<UserId> AssignedStaff { get; init; } = ImmutableList<UserId>.Empty;
+
+        public ImmutableList<UserId> AssignedStaff { get; init; } = ImmutableList<UserId>.Empty;
 
         internal bool StaffAlreadyAssigned(UserId user) => AssignedStaff.Contains(user);
 

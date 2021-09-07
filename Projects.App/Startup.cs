@@ -36,7 +36,7 @@ namespace Projects.App {
             
             services.AddControllers();
 
-            Task<bool> ValidateUser(UserId userId) => Task.FromResult(userId.Value.Contains("someone"));
+            Task<bool> ValidateUser(UserId userId) => Task.FromResult(userId.UserIdString.Contains("someone"));
             services.AddSingleton<IsUserValid>(ValidateUser);
 
             services.AddSwaggerGen(

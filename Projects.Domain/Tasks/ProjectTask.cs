@@ -27,13 +27,12 @@ namespace Projects.Domain.Tasks {
                     createdBy
                 )
             );
-
         }
 
         public void AssignStaff(UserId userId) {
             if (State.StaffAlreadyAssigned(userId)) return;
 
-            Apply(new V1.StaffAssignedToTask(State.Id, userId.Value));
+            Apply(new V1.StaffAssignedToTask(State.Id, userId.UserIdString));
         }
     }
 }
