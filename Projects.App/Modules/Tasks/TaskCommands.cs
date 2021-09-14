@@ -19,6 +19,9 @@ namespace Projects.App.Modules.Tasks {
             );
 
             public record AssignStaff(string TaskId, string UserId);
+
+            public record UpdateTaskDescription(string TaskId, string Description, string UpdatedBy) {
+            }
         }
     }
 }

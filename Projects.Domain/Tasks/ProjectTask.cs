@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 using Eventuous;
 using Projects.Domain.Projects;
 using Projects.Domain.Users;
@@ -36,6 +35,12 @@ namespace Projects.Domain.Tasks {
             if (State.StaffAlreadyAssigned(userId)) return;
 
             Apply(new V1.StaffAssignedToTask(State.Id, userId.UserIdString));
+        }
+
+        public void UpdateDescription(string description, string by) {
+            if (description == State.Description) return;
+
+            Apply(new V1.TaskDescriptionUpdated(State.Id, description, by));
         }
     }
 }

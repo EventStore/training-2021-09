@@ -7,14 +7,14 @@ using Projects.Domain.Projects;
 namespace Projects.App.Modules.Projects {
     public class ProjectService : ApplicationService<Project, ProjectState, ProjectId> {
         public ProjectService(IAggregateStore store) : base(store) {
-            OnNew<RegisterProject>(
+            OnNew<CreateProject>(
                 cmd => new ProjectId(cmd.Id),
-                (project, cmd) => project.RegisterProject(new ProjectId(cmd.Id), cmd.Name)
+                (project, cmd) => project.CreateProject(new ProjectId(cmd.Id), cmd.Description, cmd.Estimate)
             );
         }
     }
 
-    public record RegisterProject(string Id, string Name);
+    public record CreateProject(string Id, string Description, int Estimate);
 
     [Route("projects")]
     public class ProjectApi : ControllerBase {
@@ -25,7 +25,7 @@ namespace Projects.App.Modules.Projects {
         }
 
         [HttpPost]
-        public Task Register([FromBody] RegisterProject cmd, CancellationToken cancellationToken)
+        public Task Register([FromBody] CreateProject cmd, CancellationToken cancellationToken)
             => _service.Handle(cmd, cancellationToken);
     }
 }

@@ -18,6 +18,10 @@ namespace Projects.App.Modules.Queries {
                     e.Id,
                     update => update.SetOnInsert(x => x.ProjectName, e.Name)
                 ),
+                ProjectEvents.ProjectCreated e => UpdateOperationTask(
+                    e.Id,
+                    update => update.SetOnInsert(x => x.ProjectName, e.Description)
+                ),
                 TaskEvents.V1.TaskCreated e => UpdateOperationTask(
                     string.IsNullOrWhiteSpace(e.ProjectId) ? "unknown" : e.ProjectId,
                     update => update.AddToSet(

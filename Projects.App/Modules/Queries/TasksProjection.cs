@@ -5,8 +5,8 @@ using MongoDB.Driver;
 using static Projects.Domain.Tasks.TaskEvents;
 
 namespace Projects.App.Modules.Queries {
-    public class TasksHandler : MongoProjection<TaskDocument> {
-        public TasksHandler(IMongoDatabase database, ILoggerFactory loggerFactory)
+    public class TasksProjection : MongoProjection<TaskDocument> {
+        public TasksProjection(IMongoDatabase database, ILoggerFactory loggerFactory)
             : base(database, QuerySubscription.Id, loggerFactory) { }
 
         protected override ValueTask<Operation<TaskDocument>> GetUpdate(object evt, long? position) {
@@ -16,6 +16,11 @@ namespace Projects.App.Modules.Queries {
                     update => update
                         .SetOnInsert(x => x.Id, e.TaskId)
                         .SetOnInsert(x => x.Description, e.Description)
+                ),
+                V1.TaskDescriptionUpdated e => UpdateOperationTask(
+                    e.TaskId,
+                    update => update
+                        .Set(x => x.Description, e.Description)
                 ),
                 _ => NoOp
             };

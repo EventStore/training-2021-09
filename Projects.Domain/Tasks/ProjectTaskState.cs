@@ -12,7 +12,9 @@ namespace Projects.Domain.Tasks {
             return @event switch {
                 V1.TaskCreated e         => Handle(e),
                 V1.StaffAssignedToTask e => Handle(e),
-                _                        => this
+                V1.TaskDescriptionUpdated e => this,
+                V2.TaskDescriptionChanged e => this,
+            _                        => this
             };
         }
 
@@ -22,10 +24,15 @@ namespace Projects.Domain.Tasks {
         ProjectTaskState Handle(V1.TaskCreated evt)
             => this with {
                 Id = new ProjectTaskId(evt.TaskId),
+                Description = evt.Description
                 // AssignedStaff = AssignSeveralPeople(evt.AssignedStuff)
             };
 
-        public ImmutableList<UserId> AssignedStaff { get; init; } = ImmutableList<UserId>.Empty;
+        ProjectTaskState Handle(V1.TaskDescriptionUpdated evt)
+            => this with { Description = evt.Description };
+
+        internal ImmutableList<UserId> AssignedStaff { get; init; } = ImmutableList<UserId>.Empty;
+        internal string Description { get; set; }
 
         internal bool StaffAlreadyAssigned(UserId user) => AssignedStaff.Contains(user);
 

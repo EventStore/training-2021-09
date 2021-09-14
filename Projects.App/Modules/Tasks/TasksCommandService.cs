@@ -32,7 +32,12 @@ namespace Projects.App.Modules.Tasks {
 
             OnExistingAsync<V1.AssignStaff>(
                 cmd => new ProjectTaskId(cmd.TaskId),
-                async (task, cmd, _) => { task.AssignStaff(await UserId.FromString(cmd.UserId, isUserValid)); }
+                async (task, cmd, _) => task.AssignStaff(await UserId.FromString(cmd.UserId, isUserValid))
+            );
+
+            OnExisting<V1.UpdateTaskDescription>(
+                cmd => new ProjectTaskId(cmd.TaskId),
+                (task, cmd) => task.UpdateDescription(cmd.Description, cmd.UpdatedBy)
             );
         }
     }

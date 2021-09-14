@@ -22,5 +22,12 @@ namespace Projects.App.Modules.Tasks {
             CancellationToken         cancellationToken
         )
             => _service.Handle(cmd, cancellationToken);
+
+        [HttpPost("update/description")]
+        public Task<Result<ProjectTask, ProjectTaskState, ProjectTaskId>> UpdateDescription(
+            [FromBody] V1.UpdateTaskDescription cmd,
+            CancellationToken                   cancellationToken
+        )
+            => _service.Handle(cmd, cancellationToken);
     }
 }

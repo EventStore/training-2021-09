@@ -19,6 +19,14 @@ namespace Projects.Domain.Tasks {
 
             [EventType("V1.StaffAssignedToTask")]
             public record StaffAssignedToTask(string TaskId, string UserId);
+            
+            [EventType("V1.TaskDescriptionUpdated")]
+            public record TaskDescriptionUpdated(string TaskId, string Description, string UpdatedBy);
+        }
+
+        public static class V2 {
+            [EventType("V2.TaskDescriptionUpdated")]
+            public record TaskDescriptionChanged(string TaskId, string NewDescription, string UpdatedBy);
         }
     }
 }

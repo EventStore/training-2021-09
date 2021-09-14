@@ -42,8 +42,11 @@ namespace Projects.App {
             services.AddSingleton<ProjectService>();
 
             services.AddSubscription<QuerySubscription>()
-                .AddEventHandler<TasksHandler>()
+                .AddEventHandler<TasksProjection>()
                 .AddEventHandler<ProjectWithTasksProjection>();
+            
+            services.AddSubscription<UserQuerySubscription>()
+                .AddEventHandler<UserTasksProjection>();
             
             services.AddControllers();
 
