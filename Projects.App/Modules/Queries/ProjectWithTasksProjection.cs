@@ -29,6 +29,10 @@ namespace Projects.App.Modules.Queries {
                         new ProjectTaskRecord(e.TaskId, e.Description)
                     )
                 ),
+                TaskEvents.V1.TaskDescriptionUpdated e => UpdateOperationTask(
+                    filter => filter.ElemMatch(x => x.Tasks, x => x.Id == e.TaskId),
+                    update => update.Set(x => x.Tasks[-1].Description, e.Description)
+                ),
                 _ => NoOp
             };
         }

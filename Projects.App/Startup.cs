@@ -43,7 +43,8 @@ namespace Projects.App {
 
             services.AddSubscription<QuerySubscription>()
                 .AddEventHandler<TasksProjection>()
-                .AddEventHandler<ProjectWithTasksProjection>();
+                .AddEventHandler<ProjectWithTasksProjection>()
+                .AddEventHandler<ProjectAccumulationProjection>();
             
             services.AddSubscription<UserQuerySubscription>()
                 .AddEventHandler<UserTasksProjection>();

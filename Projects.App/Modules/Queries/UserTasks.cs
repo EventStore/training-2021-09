@@ -20,9 +20,12 @@ namespace Projects.App.Modules.Queries {
 
         protected override ValueTask<Operation<UserTasksDocument>> GetUpdate(object evt, long? position) {
             return evt switch {
-                V1.StaffAssignedToTask e    => Handle(e),
-                // V1.TaskDescriptionUpdated e => HandleDescr(e),
-                _                           => NoOp
+                V1.StaffAssignedToTask e => Handle(e),
+                V1.TaskDescriptionUpdated e => UpdateOperationTask(
+                    filter => filter.ElemMatch(x => x.Tasks, x => x.TaskId == e.TaskId),
+                    update => update.Set(x => x.Tasks[-1].Description, e.Description)
+                ),
+                _ => NoOp
             };
 
             async ValueTask<Operation<UserTasksDocument>> Handle(V1.StaffAssignedToTask e) {
@@ -35,10 +38,6 @@ namespace Projects.App.Modules.Queries {
                         .AddToSet(x => x.Tasks, new UserTasksDocument.UserTask(e.TaskId, task.Description))
                 );
             }
-
-            // ValueTask<Operation<UserTasksDocument>> HandleDescr(V1.TaskDescriptionUpdated e) {
-            //     return UpdateOperation(e => e.In()))
-            // }
         }
     }
 

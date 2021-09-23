@@ -10,10 +10,13 @@ namespace Projects.App.Modules.Tasks {
         public TasksCommandService(IsUserValid isUserValid, IAggregateStore store) : base(store) {
             OnNewAsync<V1.CreateTask>(
                 cmd => new ProjectTaskId(cmd.TaskId),
-                async (task, cmd, _) => {
+                async (task, cmd, token) => {
+                    var projectId = new ProjectId(cmd.ProjectId);
+                    var project   = await Store.Load<Project, ProjectState, ProjectId>(projectId, token);
+                    
                     task.CreateTask(
                         new TaskName(cmd.Name),
-                        new ProjectId(cmd.ProjectId),
+                        project,
                         cmd.Description,
                         cmd.Duration,
                         cmd.Priority,

@@ -9,7 +9,7 @@ namespace Projects.App.Modules.Projects {
         public ProjectService(IAggregateStore store) : base(store) {
             OnNew<CreateProject>(
                 cmd => new ProjectId(cmd.Id),
-                (project, cmd) => project.CreateProject(new ProjectId(cmd.Id), cmd.Description, cmd.Estimate)
+                (project, cmd) => project.CreateProject(cmd.Description, cmd.Estimate)
             );
         }
     }

@@ -8,7 +8,7 @@ namespace Projects.Domain.Tasks {
     public class ProjectTask : Aggregate<ProjectTaskState, ProjectTaskId> {
         public void CreateTask(
             TaskName       name,
-            ProjectId      projectId,
+            Project        project,
             string         description,
             TimeSpan       duration,
             int            priority,
@@ -16,10 +16,13 @@ namespace Projects.Domain.Tasks {
             DateTimeOffset createdAt,
             string         createdBy
         ) {
+            if (!project.CanAcceptTask())
+                throw new DomainException("Project doesn't accept tasks!");
+            
             Apply(
                 new V1.TaskCreated(
-                    State.Id,
-                    projectId,
+                    GetId(),
+                    project.GetId(),
                     name.Value,
                     description,
                     duration,

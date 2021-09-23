@@ -3,11 +3,15 @@ using static Projects.Domain.Projects.ProjectEvents;
 
 namespace Projects.Domain.Projects {
     public class Project : Aggregate<ProjectState, ProjectId> {
-        public void CreateProject(ProjectId projectId, string description, int estimate)
-            => Apply(new ProjectCreated(projectId, description, estimate));
+        public bool CanAcceptTask() => State.IsActive;
+        
+        public void CreateProject(string description, int estimate)
+            => Apply(new ProjectCreated(State.Id, description, estimate));
     }
 
     public record ProjectState : AggregateState<ProjectState, ProjectId> {
+        internal bool IsActive { get; private init; }
+        
         public override ProjectState When(object @event) {
             return @event switch {
                 ProjectRegistered evt => this with { Id = new ProjectId(evt.Id) },
